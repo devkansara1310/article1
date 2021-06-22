@@ -64,36 +64,37 @@ def post(request):
     # }    
     # return render(request,'post.html',context)
 
+### comment
 
+     form = articalForm() 
+    if request.method == 'POST':
+         article_tags=request.POST.get("artical_tag")
+         if 'submit' in request.POST:  
+             form = articalForm(request.POST,initial={'status': "published"})       
+             if form.is_valid():
+                 article_id=form.save() 
+                 split_tags=article_tags.split(",")
+                 for tag in split_tags:
+                     obj = ArticalTag.objects.create(name=tag,artical=article_id)
+                    obj.save()
+                 return redirect('index')
+            else:
+                 return redirect('post')
+        elif 'draft' in request.POST:
+            form = articalForm(request.POST,initial={'status': "draft"})
+             if form.is_valid():
+                 article_id=form.save()
+                 split_tags=article_tags.split(",")
+                 for tag in split_tags:
+                     obj = ArticalTag.objects.create(name=tag,artical=article_id)
+                    obj.save() 
+                 return redirect('index')
+     context={
+         'form':form,
+     }    
+     return render(request,'post.html',context)
 
-    # form = articalForm() 
-    # if request.method == 'POST':
-    #     article_tags=request.POST.get("artical_tag")
-    #     if 'submit' in request.POST:  
-    #         form = articalForm(request.POST,initial={'status': "published"})       
-    #         if form.is_valid():
-    #             article_id=form.save() 
-    #             split_tags=article_tags.split(",")
-    #             for tag in split_tags:
-    #                 obj = ArticalTag.objects.create(name=tag,artical=article_id)
-    #                 obj.save()
-    #             return redirect('index')
-    #         else:
-    #             return redirect('post')
-    #     elif 'draft' in request.POST:
-    #         form = articalForm(request.POST,initial={'status': "draft"})
-    #         if form.is_valid():
-    #             article_id=form.save()
-    #             split_tags=article_tags.split(",")
-    #             for tag in split_tags:
-    #                 obj = ArticalTag.objects.create(name=tag,artical=article_id)
-    #                 obj.save() 
-    #             return redirect('index')
-    # context={
-    #     'form':form,
-    # }    
-    # return render(request,'post.html',context)
-
+##end comment
 
 # class Show(ListView):
 #     model = Artical
@@ -151,23 +152,25 @@ def index(request):
     for i in article_id_list:
         article_last.extend(Artical.objects.filter(id=i))
         
-    
-    # for i in range(len(article)):
-    # data_for_template.append(
-    #     {
-    #         'mListObjA':mList.A,
-    #         'mListObjB':mList.B,
-    #         'uDictObj':uDict[i], # or i+1 for your example uDict
-    #     }
-    # )
-    # article_tag = ArticalTag.objects.all().values('name','artical_id')
-    # print(article_tag)
+    ##comment
+
+    for i in range(len(article)):
+     data_for_template.append(
+        {
+            'mListObjA':mList.A,
+             'mListObjB':mList.B,
+             'uDictObj':uDict[i], # or i+1 for your example uDict
+         }
+     )
+     article_tag = ArticalTag.objects.all().values('name','artical_id')
+     print(article_tag)
     article_id1 = ArticalTag.objects.filter(id=7).values('artical_id','id','name')
-    # print(article_id1)
-    # print("xxxxx")
-    # x=[item['id'] for item in objx]
-    #   (obj)
-    # print(x)
+     print(article_id1)
+     print("xxxxx")
+     x=[item['id'] for item in objx]
+      (obj)
+     print(x)
+##comment
     artical_tag = ArticalTag.objects.filter(artical__id=7)
     id = Artical.objects.all().values_list('id', flat=True)
     
